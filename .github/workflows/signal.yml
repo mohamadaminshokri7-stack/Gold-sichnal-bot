@@ -1,0 +1,28 @@
+name: Gold Signal Bot
+
+on:
+  schedule:
+    # هر ۵ دقیقه اجرا شو
+    - cron: '*/5 * * * *'
+  workflow_dispatch:   # این گزینه بهت اجازه میده دستی هم تست کنی
+
+jobs:
+  check-signal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: دریافت کد
+        uses: actions/checkout@v4
+
+      - name: نصب پایتون
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: نصب کتابخانه‌ها
+        run: pip install -r requirements.txt
+
+      - name: اجرای ربات
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python main.py
